@@ -1,0 +1,287 @@
+
+<html> <head> <title> </title> 
+<script type="text/javascript" src="jquery-1.10.2.js"></script>
+
+<style  type="text/css" >
+label#answer {
+  width: 170px;
+  height: 25px;
+  background: #dedede;
+  opacity: .4;
+  display: block ;
+  overflow: hidden;
+}
+div.st {
+  height: 110px;
+  width: 150px;
+  background: #230408 ;
+  padding: 10px;
+}
+input {
+  height: 25px;
+  width: 30px;
+  border: none ;
+  background: #02b70b;
+  margin: 2px 2px;
+}
+
+</style>
+
+<script>
+
+function pluss(){
+	number1 = $('input#num1').val();
+	number2 = $('input#num2').val();
+	
+	var add1 = {
+	number1: parseInt($('input#num1').val()),
+	number2: parseInt($('input#num2').val())
+}
+df = 4 ;
+dd = 5;
+var url = "http://service.com/calculatorService/" ;
+soapMessage = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" transport="http://schemas.xmlsoap.org/soap/http"> \
+                  <soap:Body> \
+                  <add> \
+                  <a>' + df + '</a> \
+                  <b>' + dd + '</b> \
+                  </add> \
+                  </soap:Body> \
+                  </soap:Envelope>';
+$.ajax({
+                url: url,
+                type: "POST",
+                dataType: "xml",
+                data: soapMessage,
+                //complete: endSaveProduct,
+                contentType: "text/xml",
+                async: true,
+                error: function (xhr, textStatus, errorThrown) {
+                    alert(textStatus );
+                },
+                beforeSend: function (){
+                  alert(" before send function ");
+                } ,
+                complete: function (answer){
+                  alert(answer);
+                    alert("completed ...");
+                },
+                  success: function (answer){
+                    alert(answer);
+                    alert(" success full ...");
+                  }
+            });
+	//alert(parseInt(number1) + parseInt(number2) );
+	$.post("http://localhost:9999/cal",add1, function(answer){
+			alert(answer);
+	});
+	}
+function subtract(minus){
+  //service.useService("http://localhost:9999/calculatorService.java?wsdl","subtractService");
+  //service.subtractService.callService("subtractService",$('input#num1').val() , $('input#num2').val());
+  // alert(" done ...");
+//   showResult();
+   reg = new RegExp("[0-9,\+,\-,\*,\/]","i") ;
+    data = $("#answer").text();
+	if (data.indexOf("+") == -1 || data.indexOf("*") == -1 && data.indexOf("/") == -1 ){
+op = minus.value ;
+	if (data.indexOf(op) == -1 ){
+	
+	$('#answer').text(data + op);
+	}
+	}
+
+}
+function multiply(operation){
+    data = $("#answer").text();
+	if (data.indexOf("+") == -1 || data.indexOf("-") == -1 && data.indexOf("/") == -1 ){
+op = operation.value ;
+	if (data.indexOf(op) == -1 ){
+	
+    $('#answer').text(data + op);
+	}
+	}
+
+}
+function divide(divide){
+    
+    data = $("#answer").text();
+	if (data.indexOf("+") == -1 && data.indexOf("*") == -1 && data.indexOf("-") == -1 ){
+	 op = divide.value ;
+	if (data.indexOf(op) == -1 ){
+   
+	$('#answer').text(data + op);
+	}
+	}
+
+}
+
+function showResult(){
+  alert(event.result.value);
+}
+
+function clear1(){
+  $('#answer').text(" ");
+}
+
+function show(src){
+        number = src.value;
+       // alert(number);
+}
+
+$(function(){
+   $('input.in').click(function(){
+        value = $(this).val();
+         textData = $('#answer').text();
+        $('#answer').text(textData + value);
+
+        //alert(value);
+   });
+});
+function jam(d){
+        data = $("#answer").text();
+		
+	if (data.indexOf("-") == -1 || data.indexOf("*") == -1 && data.indexOf("/") == -1 ){
+	op = d.value ;
+	if (data.indexOf(op) == -1){
+		
+		$('#answer').text(data + op);
+	}
+    }
+}
+
+var op = "";
+
+function result(){
+  data = $('#answer').text();
+  operationValue = data.indexOf(op);
+  operation = data[operationValue];
+
+  if (operation == "+"){
+			 number1 = data.slice(0,operationValue);
+             number2 = data.slice(operationValue + 1,data.length);
+			 number1 = new Number(number1);
+			 number2 = new Number(number2);
+             $('#answer').text(number1 + number2);
+  } else if (operation == "-"){
+             number1 = data.slice(0,operationValue);
+             number2 = data.slice(operationValue + 1,data.length);
+             $('#answer').text(number1 - number2);
+  } else if (operation == "*"){
+            number1 = data.slice(0,operationValue);
+             number2 = data.slice(operationValue + 1,data.length);
+            // alert(2 * 2);
+             $('#answer').text(number1 * number2);
+  }else if (operation == "/"){
+         number1 = data.slice(0,operationValue);
+             number2 = data.slice(operationValue + 1,data.length);
+             if (number2 == 0){
+                    $('#answer').text("not operable ...").css("color","red").fadeOut(2000);
+					$('#answer').css("color","black");
+					$('#answer').css("width","170px");
+					$('#answer').css("background","#dedede");
+             } else{
+             $('#answer').text(number1 / number2);
+             }
+  }else {
+        //$('#answer').text(' ');
+  }
+}
+
+function pluss(){
+        data = $("#answer").text();
+		
+	if (data.indexOf("-") == -1 || data.indexOf("*") == -1 && data.indexOf("/") == -1 ){
+	op = $('#pls').val() ;
+	if (data.indexOf(op) == -1){
+		
+		$('#answer').text(data + op);
+	}
+    }
+}
+</script>
+
+</head>
+<body>
+
+<form action="http://localhost:9999/cal?wsdl" method="post">
+
+<!-- <input type="number" id="num1"/>
+<input type="number" id="num2"/>
+-->
+<label id="answer" >   </label>
+<div class="st">
+<input type="button" value="+" id="pls" onclick="pluss();"/>
+<input type="button" value="-" onclick="subtract(this);"/>
+<input type="button" value="*" onclick="multiply(this);"/>
+<input type="button" value="/" onclick="divide(this);"/>
+<input type="button" value="1" class="in" />
+<input type="button" value="2" class="in" />
+<input type="button" value="3" class="in" />
+<input type="button" value="4" class="in" />
+<input type="button" value="5" class="in" />
+<input type="button" value="6" class="in" />
+<input type="button" value="7" class="in" />
+<input type="button" value="8" class="in" />
+<input type="button" value="9" class="in" />
+<input type="button" value="0" class="in" />
+<input type="button" value="=" onclick="result();"/>
+<input type="button" value="c" onclick="clear1();"/>
+     </div>
+
+</form>
+
+
+</body>
+</html>
+<script language="javascript">
+
+   function OnClickTestBtn()
+      // Check to see if the return value can stop the submit process or not.
+      {
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open( "POST", "http://localhost:9999/cal?wsdl", true );
+
+      xmlhttp.onreadystatechange = function()
+         // This is a calling back function that xmlhttp.send(sXML) will
+         // trigger this function to be called repeatedly.
+         {
+         if ( xmlhttp.readyState == 4 )
+            // xmlhttp.readyState:
+            // 0 means Uninitialized - open() has not been called yet.
+            // 1 means Loading - send() has not been called yet.
+            // 2 means Loaded - send() has been called, ...
+            // 3 means Interactive - Downloading, ...
+            // 4 means Completed - Finished with all operations.
+            {
+            AddDebugMsg( xmlhttp.responseText );
+            }
+         }
+
+      xmlhttp.setRequestHeader( "SOAPAction",   "HelloWorld" );
+      xmlhttp.setRequestHeader( "Content-Type", "text/xml"   );
+
+      var sXML =
+         '<?xml version="1.0" encoding="utf-8"?>' +
+         '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ' +
+                        'xmlns:xsd="http://www.w3.org/2001/XMLSchema" ' +
+                        'xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+            '<soap:Body> ' +
+               '<HelloWorld xmlns="http://localhost/TestWS" /> ' +
+            '</soap:Body> ' +
+         '</soap:Envelope>';
+      xmlhttp.send( sXML );
+
+      window.event.returnValue = false;   // Set to false to keep debugging
+      return( false );                    //    info on the screen.
+      }
+
+   function AddDebugMsg( sMsg )
+      {
+      if ( document.getElementById( "m_divDebugMsg" ) != null )
+         {
+         document.getElementById( "m_divDebugMsg" ).innerHTML += sMsg + "<br>\n";
+         }
+      }
+
+</script>
